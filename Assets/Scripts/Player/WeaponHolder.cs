@@ -15,6 +15,7 @@ public class WeaponHolder : MonoBehaviour {
         }
 
         _holdingWep = Instantiate(weapons[index], hand);
+        _holdingWep.transform.localScale = Vector3.one * 5;
     }
     public void ClearHand() {
         if (_holdingWep == null) return;
