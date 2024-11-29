@@ -14,11 +14,11 @@ public class Gun : Weapon, IAttackable, IReloadable
         if(curAmmoCount <= 0 ) return false;
 
         int shootingAmmoCount = Mathf.Min(ammoPerShot, curAmmoCount);
-        curAmmoCount = shootingAmmoCount;
+        curAmmoCount -= shootingAmmoCount;
 
         if(Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, maxDistance, detectLayer))
         {
-            if(hit.transform.TryGetComponent<IDamageable>(out IDamageable damageable))
+            if(hit.transform.TryGetComponent(out IDamageable damageable))
             {
                 damageable.TakeDamage(weaponDamage * shootingAmmoCount);
             }
@@ -29,6 +29,14 @@ public class Gun : Weapon, IAttackable, IReloadable
 
     public virtual void Reload()
     {
+        int neededCount = maxAmmoCount - curAmmoCount;
 
+        if (totalAmmoCount >= neededCount) {
+            curAmmoCount += neededCount;
+            totalAmmoCount -= neededCount;
+        } else {
+            curAmmoCount += totalAmmoCount;
+            totalAmmoCount = 0;
+        }
     }
 }
